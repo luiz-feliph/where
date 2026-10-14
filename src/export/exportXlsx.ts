@@ -14,7 +14,7 @@ export async function buildWorkbook(state: AppState): Promise<ExcelJS.Workbook> 
       { header: 'Date', key: 'date', width: 12 },
       { header: 'Description', key: 'description', width: 30 },
       { header: 'Category', key: 'category', width: 18 },
-      { header: 'Price', key: 'price', width: 14 },
+      { header: 'Price', key: 'price', width: 14, style: { numFmt: BRL_NUMBER_FORMAT } },
       { header: 'Transaction Type', key: 'type', width: 18 },
       { header: 'Hours', key: 'hours', width: 12 },
       { header: 'Workdays', key: 'workdays', width: 12 },

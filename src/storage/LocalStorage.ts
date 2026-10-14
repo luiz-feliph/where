@@ -14,7 +14,7 @@ export function createInitialState(): AppState {
   return {
     schemaVersion: DEFAULT_SCHEMA_VERSION,
     settings: null,
-    categories: SEED_CATEGORIES,
+    categories: SEED_CATEGORIES.map((c) => ({ ...c })),
     entries: [],
     conversionUnit: 'hours',
   }
