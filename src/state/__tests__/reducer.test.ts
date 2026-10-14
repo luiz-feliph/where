@@ -86,3 +86,82 @@ describe('reducer', () => {
     expect(state.categories.length).toBeGreaterThanOrEqual(1)
   })
 })
+
+describe('reducer extra branches', () => {
+  it('ignores invalid entry updates and category creates', () => {
+    const state = createInitialState()
+    const cat = state.categories[0]
+    const next = appReducer(state, {
+      type: 'UPDATE_ENTRY',
+      payload: { id: 'x', date: '2026-01-02', description: '', categoryId: cat.id, amountCents: 100, type: 'expense' },
+    })
+    expect(next).toBe(state)
+    const next2 = appReducer(state, { type: 'ADD_CATEGORY', payload: { id: 'x', name: '  ', color: '#fff' } })
+    expect(next2).toBe(state)
+  })
+
+  it('ignores duplicate category rename', () => {
+    const state = createInitialState()
+    const other = state.categories.find((c) => c.name === 'Other')!
+    const next = appReducer(state, { type: 'UPDATE_CATEGORY', payload: { ...other, name: 'Personal' } })
+    expect(next).toBe(state)
+  })
+
+  it('ignores delete when category count would drop below one', () => {
+    const state = { ...createInitialState(), categories: [createInitialState().categories[0]] }
+    const next = appReducer(state, { type: 'DELETE_CATEGORY', payload: { id: state.categories[0].id, reassignToId: 'nope' } })
+    expect(next).toBe(state)
+  })
+
+  it('ignores delete when reassign target does not exist', () => {
+    const state = createInitialState()
+    const next = appReducer(state, { type: 'DELETE_CATEGORY', payload: { id: state.categories[0].id, reassignToId: 'nope' } })
+    expect(next).toBe(state)
+  })
+
+  it('keeps provided color when adding category', () => {
+    const state = createInitialState()
+    const next = appReducer(state, { type: 'ADD_CATEGORY', payload: { id: 'x', name: 'Gym', color: '#000000' } })
+    expect(next.categories.find((c) => c.name === 'Gym')?.color).toBe('#000000')
+  })
+
+  it('updates conversion unit and hydrates', () => {
+    const state = createInitialState()
+    const next = appReducer(state, { type: 'SET_CONVERSION_UNIT', payload: 'workdays' })
+    expect(next.conversionUnit).toBe('workdays')
+    const hydrated = appReducer(state, { type: 'HYDRATE', payload: { ...state, conversionUnit: 'workdays' } })
+    expect(hydrated.conversionUnit).toBe('workdays')
+  })
+})
+
+describe('reducer remaining branches', () => {
+  it('ignores invalid new entries', () => {
+    const state = createInitialState()
+    const next = appReducer(state, {
+      type: 'ADD_ENTRY',
+      payload: { id: 'x', date: '2026-01-02', description: '', categoryId: state.categories[0].id, amountCents: 0, type: 'expense' },
+    })
+    expect(next).toBe(state)
+  })
+
+  it('renames a category when valid', () => {
+    const state = createInitialState()
+    const cat = state.categories[0]
+    const next = appReducer(state, { type: 'UPDATE_CATEGORY', payload: { ...cat, name: 'Renamed' } })
+    expect(next.categories.some((c) => c.name === 'Renamed')).toBe(true)
+  })
+
+  it('falls back to a palette color when all are used', () => {
+    const palette = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#98D8C8', '#F06292', '#64B5F6', '#FFD700', '#FFB6C1', '#D2691E']
+    const state = createInitialState()
+    state.categories = palette.map((color, i) => ({ id: `c${i}`, name: `C${i}`, color }))
+    const next = appReducer(state, { type: 'ADD_CATEGORY', payload: { id: 'new', name: 'Extra', color: '' as unknown as string } })
+    expect(next.categories.find((c) => c.name === 'Extra')?.color).toBeTruthy()
+  })
+
+  it('returns state for unknown action', () => {
+    const state = createInitialState()
+    const next = appReducer(state, { type: 'UNKNOWN' } as never)
+    expect(next).toBe(state)
+  })
+})
