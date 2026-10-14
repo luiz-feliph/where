@@ -18,6 +18,10 @@
   box-sizing: border-box;
 }
 
+html {
+  overflow-x: hidden;
+}
+
 body {
   margin: 0;
   background: var(--bg);
@@ -57,7 +61,7 @@ h3 {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   gap: 0.75rem;
   padding: 0.75rem 1rem;
   background: var(--surface);
@@ -77,6 +81,8 @@ h3 {
   flex-wrap: wrap;
   align-items: center;
   gap: 0.5rem;
+  justify-content: center;
+  margin: .5rem 0;
 }
 
 select,
@@ -134,6 +140,11 @@ button:focus-visible {
   border-color: var(--danger);
 }
 
+.btn.export {
+  width: 100%;
+  margin-top: 1rem;
+}
+
 .toggle-unit {
   font-variant-numeric: tabular-nums;
 }
@@ -163,10 +174,10 @@ button:focus-visible {
   width: 100%;
   max-width: 1100px;
   margin: 0 auto;
-  padding: 1rem;
+  padding: 2rem 1rem 5rem;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 2.5rem;
 }
 
 section h2 {
@@ -178,6 +189,20 @@ section h2 {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 0.75rem;
+}
+
+.entries {
+  min-width: 0;
+}
+
+.table-scroll {
+  position: relative;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.entry-table {
+  min-width: 640px;
 }
 
 table {
@@ -197,6 +222,7 @@ td {
 }
 
 th {
+  text-align: center;
   font-size: 0.78rem;
   text-transform: uppercase;
   letter-spacing: 0.04em;
@@ -209,7 +235,7 @@ tbody tr:last-child td {
 }
 
 .num {
-  text-align: right;
+  text-align: center;
   font-variant-numeric: tabular-nums;
 }
 
@@ -268,8 +294,8 @@ tbody tr:last-child td {
 
 .fab {
   position: fixed;
-  right: 1.25rem;
-  bottom: 1.25rem;
+  right: max(1.25rem, env(safe-area-inset-right));
+  bottom: max(1.25rem, env(safe-area-inset-bottom));
   width: 3.25rem;
   height: 3.25rem;
   border-radius: 50%;
@@ -378,11 +404,19 @@ tbody tr:last-child td {
 
 .dashboard-body {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: minmax(0, 1fr);
   gap: 1.5rem;
 }
 
+.dashboard-body > * {
+  min-width: 0;
+}
+
 @media (min-width: 768px) {
+  .topbar {
+    justify-content: space-between;
+  }
+
   .dashboard-body {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     align-items: start;
@@ -392,6 +426,10 @@ tbody tr:last-child td {
 .num,
 .category-table td.num {
   font-variant-numeric: tabular-nums;
+}
+
+.category-table {
+  min-width: 480px;
 }
 
 .pie svg {

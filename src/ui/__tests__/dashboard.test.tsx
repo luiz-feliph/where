@@ -8,14 +8,14 @@ const categories: Category[] = [
   { id: 'c2', name: 'Investment', color: '#FFD700' },
 ]
 const entries: Entry[] = [
-  { id: 'e1', date: '2026-01-02', description: 'Lunch', categoryId: 'c1', amountCents: 37500, type: 'expense' },
-  { id: 'e2', date: '2026-01-03', description: 'Salary', categoryId: 'c1', amountCents: 500000, type: 'income' },
-  { id: 'e3', date: '2026-02-01', description: 'Other month', categoryId: 'c1', amountCents: 99900, type: 'expense' },
+  { id: 'e1', date: '2026-01-02', description: 'Lunch', categoryId: 'c1', amount: 375, type: 'expense' },
+  { id: 'e2', date: '2026-01-03', description: 'Salary', categoryId: 'c1', amount: 5000, type: 'income' },
+  { id: 'e3', date: '2026-02-01', description: 'Other month', categoryId: 'c1', amount: 999, type: 'expense' },
 ]
 
 describe('Dashboard', () => {
   it('summarizes income, expenses and balance for the month', () => {
-    render(<Dashboard entries={entries} categories={categories} settings={{ monthlyIncomeCents: 150000, weeklyHours: 20, hoursPerWorkday: 17 }} year={2026} month={1} unit="hours" />)
+    render(<Dashboard entries={entries} categories={categories} settings={{ monthlyIncome: 1500, weeklyHours: 20, hoursPerWorkday: 17 }} year={2026} month={1} unit="hours" />)
     expect(screen.getByText('R$ 5,000.00')).toBeInTheDocument()
     expect(screen.getAllByText('R$ 375.00').length).toBeGreaterThan(0)
     expect(screen.getByText('R$ 4,625.00')).toBeInTheDocument()

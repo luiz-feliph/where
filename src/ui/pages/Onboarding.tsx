@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useApp } from '../../state/context'
-import { parseBRLStringToCents } from '../../domain/formatting'
+import { parseBRLToReais } from '../../domain/formatting'
 import { validateSettings } from '../../domain/validation'
 
 export function Onboarding() {
@@ -13,7 +13,7 @@ export function Onboarding() {
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     const settings = {
-      monthlyIncomeCents: parseBRLStringToCents(income),
+      monthlyIncome: parseBRLToReais(income),
       weeklyHours: Number(weeklyHours),
       hoursPerWorkday: Number(hoursPerWorkday),
     }

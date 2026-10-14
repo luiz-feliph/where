@@ -5,20 +5,25 @@ const BRL_FORMATTER = new Intl.NumberFormat('en-US', {
   maximumFractionDigits: 2,
 })
 
-export function formatBRL(cents: number): string {
-  const formatted = BRL_FORMATTER.format(cents / 100)
+/** Rounds a money amount (in reais) to 2 decimal places to avoid float artifacts. */
+export function roundMoney(value: number): number {
+  return Math.round((value + Number.EPSILON) * 100) / 100
+}
+
+export function formatBRL(value: number): string {
+  const formatted = BRL_FORMATTER.format(value)
   // Ensure space after R$ as in example "R$ 1,234.56"
   return formatted.replace('R$', 'R$ ')
 }
 
-export function parseBRLStringToCents(value: string): number {
+export function parseBRLToReais(value: string): number {
   if (!value) return 0
   const cleaned = value.replace(/[^0-9.,]/g, '').trim()
   if (cleaned === '') return 0
   const noThousands = cleaned.replace(/,/g, '')
-  const cents = Math.round(parseFloat(noThousands) * 100)
-  if (Number.isNaN(cents)) return 0
-  return cents
+  const parsed = parseFloat(noThousands)
+  if (Number.isNaN(parsed)) return 0
+  return roundMoney(parsed)
 }
 
 export function formatHours(hours: number, decimals = 1): string {

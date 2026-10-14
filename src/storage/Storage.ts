@@ -7,4 +7,5 @@ export interface Storage {
   lastLoadHadError?: boolean
 }
 
-export const STORAGE_KEY = 'where:v1'
+export const STORAGE_KEY = 'where:v2'
+export const LEGACY_STORAGE_KEY = 'where:v1'

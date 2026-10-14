@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import { useApp } from '../../state/context'
-import { parseBRLStringToCents } from '../../domain/formatting'
+import { parseBRLToReais } from '../../domain/formatting'
 import { validateSettings } from '../../domain/validation'
 
 export function SettingsPage() {
   const { state, dispatch } = useApp()
-  const [income, setIncome] = useState(state.settings ? (state.settings.monthlyIncomeCents / 100).toFixed(2) : '')
+  const [income, setIncome] = useState(state.settings ? state.settings.monthlyIncome.toFixed(2) : '')
   const [weeklyHours, setWeeklyHours] = useState(state.settings ? String(state.settings.weeklyHours) : '')
   const [hoursPerWorkday, setHoursPerWorkday] = useState(state.settings ? String(state.settings.hoursPerWorkday) : '17')
   const [errors, setErrors] = useState<string[]>([])
@@ -14,7 +14,7 @@ export function SettingsPage() {
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     const settings = {
-      monthlyIncomeCents: parseBRLStringToCents(income),
+      monthlyIncome: parseBRLToReais(income),
       weeklyHours: Number(weeklyHours),
       hoursPerWorkday: Number(hoursPerWorkday),
     }
@@ -55,7 +55,7 @@ export function SettingsPage() {
       </form>
       <button
         type="button"
-        className="btn"
+        className="btn export"
         onClick={async () => {
           const { downloadExport } = await import('../../export/exportXlsx')
           await downloadExport(state)

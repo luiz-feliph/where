@@ -1,10 +1,10 @@
 export function validateSettings(settings: {
-  monthlyIncomeCents: number
+  monthlyIncome: number
   weeklyHours: number
   hoursPerWorkday: number
 }): string[] {
   const errors: string[] = []
-  if (!settings.monthlyIncomeCents || settings.monthlyIncomeCents <= 0) {
+  if (!settings.monthlyIncome || settings.monthlyIncome <= 0) {
     errors.push('Monthly income must be greater than 0')
   }
   if (!settings.weeklyHours || settings.weeklyHours <= 0 || settings.weeklyHours > 168) {
@@ -18,7 +18,7 @@ export function validateSettings(settings: {
 
 export function validateEntry(entry: {
   description: string
-  amountCents: number
+  amount: number
   date: string
   categoryId: string
 }): string[] {
@@ -26,7 +26,7 @@ export function validateEntry(entry: {
   if (!entry.description || entry.description.trim().length === 0) {
     errors.push('Description is required')
   }
-  if (!entry.amountCents || entry.amountCents <= 0) {
+  if (!entry.amount || entry.amount <= 0) {
     errors.push('Price must be greater than 0')
   }
   if (!entry.date || !/^\d{4}-\d{2}-\d{2}$/.test(entry.date)) {

@@ -6,14 +6,14 @@ import type { Entry, Category, Settings } from '../../domain/types'
 describe('reducer', () => {
   it('sets settings when valid', () => {
     const state = createInitialState()
-    const settings: Settings = { monthlyIncomeCents: 150000, weeklyHours: 20, hoursPerWorkday: 17 }
+    const settings: Settings = { monthlyIncome: 1500, weeklyHours: 20, hoursPerWorkday: 17 }
     const next = appReducer(state, { type: 'SET_SETTINGS', payload: settings })
     expect(next.settings).toEqual(settings)
   })
 
   it('does not set settings when invalid', () => {
     const state = createInitialState()
-    const settings: Settings = { monthlyIncomeCents: 0, weeklyHours: 20, hoursPerWorkday: 17 }
+    const settings: Settings = { monthlyIncome: 0, weeklyHours: 20, hoursPerWorkday: 17 }
     const next = appReducer(state, { type: 'SET_SETTINGS', payload: settings })
     expect(next.settings).toBeNull()
   })
@@ -26,7 +26,7 @@ describe('reducer', () => {
       date: '2026-01-02',
       description: 'Test',
       categoryId: cat.id,
-      amountCents: 1000,
+      amount: 10,
       type: 'expense',
     }
     const next = appReducer(state, { type: 'ADD_ENTRY', payload: entry })
@@ -38,13 +38,13 @@ describe('reducer', () => {
     const cat = state.categories[0]
     let next = appReducer(state, {
       type: 'ADD_ENTRY',
-      payload: { id: '1', date: '2026-01-02', description: 'Test', categoryId: cat.id, amountCents: 1000, type: 'expense' },
+      payload: { id: '1', date: '2026-01-02', description: 'Test', categoryId: cat.id, amount: 10, type: 'expense' },
     })
     next = appReducer(next, {
       type: 'UPDATE_ENTRY',
-      payload: { id: '1', date: '2026-01-03', description: 'Test2', categoryId: cat.id, amountCents: 2000, type: 'expense' },
+      payload: { id: '1', date: '2026-01-03', description: 'Test2', categoryId: cat.id, amount: 20, type: 'expense' },
     })
-    expect(next.entries[0].amountCents).toBe(2000)
+    expect(next.entries[0].amount).toBe(20)
     next = appReducer(next, { type: 'DELETE_ENTRY', payload: { id: '1' } })
     expect(next.entries.length).toBe(0)
   })
@@ -70,7 +70,7 @@ describe('reducer', () => {
     const personal = state.categories.find((c) => c.name === 'Personal')!
     state = appReducer(state, {
       type: 'ADD_ENTRY',
-      payload: { id: '1', date: '2026-01-02', description: 'T', categoryId: other.id, amountCents: 1000, type: 'expense' },
+      payload: { id: '1', date: '2026-01-02', description: 'T', categoryId: other.id, amount: 10, type: 'expense' },
     })
     const next = appReducer(state, { type: 'DELETE_CATEGORY', payload: { id: other.id, reassignToId: personal.id } })
     expect(next.categories.some((c) => c.id === other.id)).toBe(false)
@@ -93,7 +93,7 @@ describe('reducer extra branches', () => {
     const cat = state.categories[0]
     const next = appReducer(state, {
       type: 'UPDATE_ENTRY',
-      payload: { id: 'x', date: '2026-01-02', description: '', categoryId: cat.id, amountCents: 100, type: 'expense' },
+      payload: { id: 'x', date: '2026-01-02', description: '', categoryId: cat.id, amount: 1, type: 'expense' },
     })
     expect(next).toBe(state)
     const next2 = appReducer(state, { type: 'ADD_CATEGORY', payload: { id: 'x', name: '  ', color: '#fff' } })
@@ -139,7 +139,7 @@ describe('reducer remaining branches', () => {
     const state = createInitialState()
     const next = appReducer(state, {
       type: 'ADD_ENTRY',
-      payload: { id: 'x', date: '2026-01-02', description: '', categoryId: state.categories[0].id, amountCents: 0, type: 'expense' },
+      payload: { id: 'x', date: '2026-01-02', description: '', categoryId: state.categories[0].id, amount: 0, type: 'expense' },
     })
     expect(next).toBe(state)
   })

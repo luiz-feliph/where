@@ -45,7 +45,7 @@ export function appReducer(state: AppState, action: Action): AppState {
     case 'ADD_ENTRY': {
       const errors = validateEntry({
         description: action.payload.description,
-        amountCents: action.payload.amountCents,
+        amount: action.payload.amount,
         date: action.payload.date,
         categoryId: action.payload.categoryId,
       })
@@ -57,7 +57,7 @@ export function appReducer(state: AppState, action: Action): AppState {
     case 'UPDATE_ENTRY': {
       const errors = validateEntry({
         description: action.payload.description,
-        amountCents: action.payload.amountCents,
+        amount: action.payload.amount,
         date: action.payload.date,
         categoryId: action.payload.categoryId,
       })

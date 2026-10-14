@@ -24,7 +24,7 @@ export async function buildWorkbook(state: AppState): Promise<ExcelJS.Workbook> 
         date: row.date,
         description: row.description,
         category: row.category,
-        price: row.priceCents / 100,
+        price: row.price,
         type: row.transactionType,
         hours: row.hours,
         workdays: row.workdays,

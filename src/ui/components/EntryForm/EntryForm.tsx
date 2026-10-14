@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import type { Category, Entry } from '../../../domain/types'
-import { parseBRLStringToCents, formatBRL } from '../../../domain/formatting'
+import { parseBRLToReais, formatBRL } from '../../../domain/formatting'
 import { validateEntry } from '../../../domain/validation'
 
 function todayISO(): string {
@@ -23,7 +23,7 @@ export function EntryForm({
   onCancel: () => void
 }) {
   const [description, setDescription] = useState(entry?.description ?? '')
-  const [amount, setAmount] = useState(entry ? (entry.amountCents / 100).toFixed(2) : '')
+  const [amount, setAmount] = useState(entry ? entry.amount.toFixed(2) : '')
   const [date, setDate] = useState(entry?.date ?? todayISO())
   const [categoryId, setCategoryId] = useState(entry?.categoryId ?? categories[0]?.id ?? '')
   const [type, setType] = useState<Entry['type']>(entry?.type ?? 'expense')
@@ -31,8 +31,8 @@ export function EntryForm({
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    const amountCents = parseBRLStringToCents(amount)
-    const errs = validateEntry({ description, amountCents, date, categoryId })
+    const amountValue = parseBRLToReais(amount)
+    const errs = validateEntry({ description, amount: amountValue, date, categoryId })
     if (errs.length > 0) {
       setErrors(errs)
       return
@@ -40,7 +40,7 @@ export function EntryForm({
     onSave({
       id: entry?.id ?? crypto.randomUUID(),
       description: description.trim(),
-      amountCents,
+      amount: amountValue,
       date,
       categoryId,
       type,
@@ -84,8 +84,8 @@ export function EntryForm({
               {errors.map((err) => <li key={err}>{err}</li>)}
             </ul>
           )}
-          {amount && parseBRLStringToCents(amount) > 0 && (
-            <p className="preview">= {formatBRL(parseBRLStringToCents(amount))}</p>
+          {amount && parseBRLToReais(amount) > 0 && (
+            <p className="preview">= {formatBRL(parseBRLToReais(amount))}</p>
           )}
           <div className="modal-actions">
             <button type="button" className="btn" onClick={onCancel}>Cancel</button>

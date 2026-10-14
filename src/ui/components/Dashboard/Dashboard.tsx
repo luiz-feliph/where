@@ -1,7 +1,7 @@
 import type { Entry, Category, Settings } from '../../../domain/types'
 import { aggregateByCategoryForMonth } from '../../../domain/aggregation'
 import { getMonthKey } from '../../../domain/month'
-import { formatBRL, formatHours, formatWorkdays } from '../../../domain/formatting'
+import { formatBRL, formatHours, formatWorkdays, roundMoney } from '../../../domain/formatting'
 import { PieChart } from './PieChart'
 
 function formatConverted(value: number, unit: 'hours' | 'workdays'): string {
@@ -23,7 +23,7 @@ export function Dashboard({
   month: number
   unit: 'hours' | 'workdays'
 }) {
-  const { aggregates, totalExpensesCents, totalExpensesConverted } = aggregateByCategoryForMonth(
+  const { aggregates, totalExpenses, totalExpensesConverted } = aggregateByCategoryForMonth(
     entries,
     year,
     month,
@@ -35,10 +35,10 @@ export function Dashboard({
   const monthStr = String(month).padStart(2, '0')
   const key = `${year}-${monthStr}`
   const monthEntries = entries.filter((e) => getMonthKey(e.date) === key)
-  const totalIncomeCents = monthEntries
+  const totalIncome = monthEntries
     .filter((e) => e.type === 'income')
-    .reduce((sum, e) => sum + e.amountCents, 0)
-  const balanceCents = totalIncomeCents - totalExpensesCents
+    .reduce((sum, e) => sum + e.amount, 0)
+  const balance = roundMoney(totalIncome - totalExpenses)
 
   return (
     <section className="dashboard">
@@ -46,15 +46,15 @@ export function Dashboard({
       <div className="summary">
         <div className="summary-item">
           <span>Total income</span>
-          <strong>{formatBRL(totalIncomeCents)}</strong>
+          <strong>{formatBRL(totalIncome)}</strong>
         </div>
         <div className="summary-item">
           <span>Total expenses</span>
-          <strong>{formatBRL(totalExpensesCents)}</strong>
+          <strong>{formatBRL(totalExpenses)}</strong>
         </div>
         <div className="summary-item">
           <span>Balance</span>
-          <strong className={balanceCents < 0 ? 'negative' : ''}>{formatBRL(balanceCents)}</strong>
+          <strong className={balance < 0 ? 'negative' : ''}>{formatBRL(balance)}</strong>
         </div>
         <div className="summary-item">
           <span>Expenses in {unit}</span>
@@ -66,29 +66,31 @@ export function Dashboard({
         <p className="empty">No expenses this month.</p>
       ) : (
         <div className="dashboard-body">
-          <table className="category-table">
-            <thead>
-              <tr>
-                <th scope="col">Category</th>
-                <th scope="col">Amount</th>
-                <th scope="col">{unit === 'hours' ? 'Hours' : 'Workdays'}</th>
-                <th scope="col">%</th>
-              </tr>
-            </thead>
-            <tbody>
-              {aggregates.map((a) => (
-                <tr key={a.categoryId}>
-                  <td>
-                    <span className="swatch" style={{ background: a.categoryColor }} aria-hidden="true" />
-                    {a.categoryName}
-                  </td>
-                  <td className="num">{formatBRL(a.amountCents)}</td>
-                  <td className="num">{formatConverted(a.amountConverted, unit)}</td>
-                  <td className="num">{a.percentage.toFixed(1)}%</td>
+          <div className="table-scroll">
+            <table className="category-table">
+              <thead>
+                <tr>
+                  <th scope="col">Category</th>
+                  <th scope="col">Amount</th>
+                  <th scope="col">{unit === 'hours' ? 'Hours' : 'Workdays'}</th>
+                  <th scope="col">%</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {aggregates.map((a) => (
+                  <tr key={a.categoryId}>
+                    <td>
+                      <span className="swatch" style={{ background: a.categoryColor }} aria-hidden="true" />
+                      {a.categoryName}
+                    </td>
+                    <td className="num">{formatBRL(a.amount)}</td>
+                    <td className="num">{formatConverted(a.amountConverted, unit)}</td>
+                    <td className="num">{a.percentage.toFixed(1)}%</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
           <PieChart data={aggregates} />
         </div>
       )}

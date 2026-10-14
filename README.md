@@ -4,8 +4,8 @@ Where turns money into **life time**. You tell the app how much you earn and how
 you work, and it converts every expense into the hours (and workdays) of your life it
 actually costs.
 
-> Example: income R$ 1,500.00/month, 20 h/week, 1 workday = 17h → hourly rate ≈ R$ 17.31.
-> A R$ 375.00 expense ≈ 21.7 h ≈ 1.27 workdays.
+> Example: income R$ 1,500.00/month, 20 h/week, 1 workday = 17h → hourly rate ≈ R$ 18.75.
+> A R$ 375.00 expense ≈ 20.0 h ≈ 1.18 workdays.
 
 ## Features
 
@@ -45,14 +45,15 @@ npm run dev      # http://localhost:5173
 - `src/domain` — pure functions: conversions, formatting, validation, month filtering
   and per-category aggregation.
 - `src/storage` — `Storage` interface + localStorage implementation (versioned key
-  `where:v1`, `schemaVersion`, corrupted-JSON fallback).
+  `where:v2`, `schemaVersion`, corrupted-JSON fallback, automatic migration from
+  `where:v1`).
 - `src/state` | `useReducer` + Context. No state library.
 - `src/ui` | components and pages.
 - `src/export` | builds the `.xlsx` workbook with `exceljs` (lazy-loaded).
 
-Money is stored and computed as **integer cents**; formatting happens only for display.
-Dates are plain calendar days (`YYYY-MM-DD`) and never parsed in a timezone-shifting
-way.
+Money is stored and computed as **reais** (plain numbers, rounded to 2 decimals); formatting
+happens only for display. Dates are plain calendar days (`YYYY-MM-DD`) and never parsed in a
+timezone-shifting way.
 
 ## Installing the PWA
 

@@ -1,7 +1,7 @@
 export type TransactionType = 'income' | 'expense'
 
 export interface Settings {
-  monthlyIncomeCents: number
+  monthlyIncome: number
   weeklyHours: number
   hoursPerWorkday: number
 }
@@ -17,7 +17,7 @@ export interface Entry {
   date: string // ISO YYYY-MM-DD
   description: string
   categoryId: string
-  amountCents: number
+  amount: number
   type: TransactionType
 }
 
@@ -29,4 +29,4 @@ export interface AppState {
   conversionUnit: 'hours' | 'workdays'
 }
 
-export const DEFAULT_SCHEMA_VERSION = 1
+export const DEFAULT_SCHEMA_VERSION = 2

@@ -30,11 +30,11 @@ describe('App integration', () => {
 
     expect(screen.getByText('Lunch')).toBeInTheDocument()
     expect(screen.getAllByRole('columnheader', { name: 'Hours' }).length).toBeGreaterThan(0)
-    expect(screen.getAllByText('21.7 h').length).toBeGreaterThan(0)
+    expect(screen.getAllByText('20.0 h').length).toBeGreaterThan(0)
 
     await userEvent.click(screen.getByRole('button', { name: 'Hours' }))
     expect(screen.getAllByRole('columnheader', { name: 'Workdays' }).length).toBeGreaterThan(0)
-    expect(screen.getAllByText('1.27 d').length).toBeGreaterThan(0)
+    expect(screen.getAllByText('1.18 d').length).toBeGreaterThan(0)
   })
 
   it('navigates to categories and settings', async () => {

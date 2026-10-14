@@ -1,25 +1,23 @@
 export function workedHoursPerMonth(weeklyHours: number): number {
   if (weeklyHours <= 0) return 0
-  return (weeklyHours * 52) / 12
+  return weeklyHours * 4
 }
 
-export function hourlyRate(monthlyIncomeCents: number, weeklyHours: number): number {
-  if (monthlyIncomeCents <= 0 || weeklyHours <= 0) return 0
-  const monthlyIncome = monthlyIncomeCents / 100
+export function hourlyRate(monthlyIncome: number, weeklyHours: number): number {
+  if (monthlyIncome <= 0 || weeklyHours <= 0) return 0
   const hoursPerMonth = workedHoursPerMonth(weeklyHours)
   if (hoursPerMonth <= 0) return 0
   return monthlyIncome / hoursPerMonth
 }
 
-export function expenseHours(amountCents: number, weeklyHours: number, monthlyIncomeCents: number): number {
-  const rate = hourlyRate(monthlyIncomeCents, weeklyHours)
-  if (rate <= 0 || amountCents <= 0) return 0
-  const price = amountCents / 100
-  return price / rate
+export function expenseHours(amount: number, weeklyHours: number, monthlyIncome: number): number {
+  const rate = hourlyRate(monthlyIncome, weeklyHours)
+  if (rate <= 0 || amount <= 0) return 0
+  return amount / rate
 }
 
-export function expenseWorkdays(amountCents: number, weeklyHours: number, monthlyIncomeCents: number, hoursPerWorkday: number): number {
+export function expenseWorkdays(amount: number, weeklyHours: number, monthlyIncome: number, hoursPerWorkday: number): number {
   if (hoursPerWorkday <= 0) return 0
-  const hours = expenseHours(amountCents, weeklyHours, monthlyIncomeCents)
+  const hours = expenseHours(amount, weeklyHours, monthlyIncome)
   return hours / hoursPerWorkday
 }

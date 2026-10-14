@@ -5,16 +5,16 @@ import { buildWorkbookBuffer } from '../exportXlsx'
 import type { AppState } from '../../domain/types'
 
 const state: AppState = {
-  schemaVersion: 1,
-  settings: { monthlyIncomeCents: 150000, weeklyHours: 20, hoursPerWorkday: 17 },
+  schemaVersion: 2,
+  settings: { monthlyIncome: 1500, weeklyHours: 20, hoursPerWorkday: 17 },
   categories: [
     { id: 'c1', name: 'Food & Drinks', color: '#FF6B6B' },
     { id: 'c2', name: 'Investment', color: '#FFD700' },
   ],
   entries: [
-    { id: 'e1', date: '2026-01-02', description: 'Lunch', categoryId: 'c1', amountCents: 37500, type: 'expense' },
-    { id: 'e2', date: '2026-01-03', description: 'Salary', categoryId: 'c2', amountCents: 500000, type: 'income' },
-    { id: 'e3', date: '2026-02-01', description: 'Fund', categoryId: 'c2', amountCents: 10000, type: 'expense' },
+    { id: 'e1', date: '2026-01-02', description: 'Lunch', categoryId: 'c1', amount: 375, type: 'expense' },
+    { id: 'e2', date: '2026-01-03', description: 'Salary', categoryId: 'c2', amount: 5000, type: 'income' },
+    { id: 'e3', date: '2026-02-01', description: 'Fund', categoryId: 'c2', amount: 100, type: 'expense' },
   ],
   conversionUnit: 'hours',
 }
@@ -32,8 +32,8 @@ describe('buildMonthSheets', () => {
     const jan = sheets[0]
     const lunch = jan.rows.find((r) => r.description === 'Lunch')!
     const salary = jan.rows.find((r) => r.description === 'Salary')!
-    expect(lunch.hours).toBeCloseTo(21.6666667, 6)
-    expect(lunch.workdays).toBeCloseTo(1.2745098, 6)
+    expect(lunch.hours).toBeCloseTo(20, 6)
+    expect(lunch.workdays).toBeCloseTo(1.1764706, 6)
     expect(salary.hours).toBe(0)
     expect(salary.workdays).toBe(0)
   })

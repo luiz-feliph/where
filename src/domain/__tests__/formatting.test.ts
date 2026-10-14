@@ -1,15 +1,15 @@
-import { formatBRL, parseBRLStringToCents, formatHours, formatWorkdays, formatShortDate } from '../formatting'
+import { formatBRL, parseBRLToReais, formatHours, formatWorkdays, formatShortDate } from '../formatting'
 
-test('formatBRL formats correctly', () => {
-  expect(formatBRL(123456)).toBe('R$ 1,234.56')
-  expect(formatBRL(100)).toBe('R$ 1.00')
+test('formatBRL formats reais', () => {
+  expect(formatBRL(1234.56)).toBe('R$ 1,234.56')
+  expect(formatBRL(1)).toBe('R$ 1.00')
   expect(formatBRL(0)).toBe('R$ 0.00')
 })
 
-test('parseBRLStringToCents parses price strings', () => {
-  expect(parseBRLStringToCents('375.00')).toBe(37500)
-  expect(parseBRLStringToCents('1,234.56')).toBe(123456)
-  expect(parseBRLStringToCents('10')).toBe(1000)
+test('parseBRLToReais parses price strings', () => {
+  expect(parseBRLToReais('375.00')).toBe(375)
+  expect(parseBRLToReais('1,234.56')).toBe(1234.56)
+  expect(parseBRLToReais('10')).toBe(10)
 })
 
 test('formatHours and formatWorkdays', () => {

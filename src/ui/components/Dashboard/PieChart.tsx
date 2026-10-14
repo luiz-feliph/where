@@ -13,10 +13,10 @@ function arcPath(cx: number, cy: number, r: number, startAngle: number, endAngle
 }
 
 function computeSlices(data: CategoryAggregate[], cx: number, cy: number, r: number) {
-  const total = data.reduce((sum, d) => sum + d.amountCents, 0)
+  const total = data.reduce((sum, d) => sum + d.amount, 0)
   let angle = 0
   return data.map((datum) => {
-    const sweep = total === 0 ? 0 : (datum.amountCents / total) * 360
+    const sweep = total === 0 ? 0 : (datum.amount / total) * 360
     const path = arcPath(cx, cy, r, angle, angle + sweep)
     angle += sweep
     return { datum, path }
@@ -24,7 +24,7 @@ function computeSlices(data: CategoryAggregate[], cx: number, cy: number, r: num
 }
 
 export function PieChart({ data }: { data: CategoryAggregate[] }) {
-  const total = data.reduce((sum, d) => sum + d.amountCents, 0)
+  const total = data.reduce((sum, d) => sum + d.amount, 0)
   if (total === 0) return null
 
   const size = 240

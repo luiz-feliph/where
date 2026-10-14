@@ -6,7 +6,7 @@ export interface SheetRow {
   date: string
   description: string
   category: string
-  priceCents: number
+  price: number
   transactionType: string
   hours: number
   workdays: number
@@ -43,11 +43,11 @@ export function buildMonthSheets(state: AppState): MonthSheet[] {
       let hours = 0
       let workdays = 0
       if (entry.type === 'expense' && state.settings) {
-        hours = expenseHours(entry.amountCents, state.settings.weeklyHours, state.settings.monthlyIncomeCents)
+        hours = expenseHours(entry.amount, state.settings.weeklyHours, state.settings.monthlyIncome)
         workdays = expenseWorkdays(
-          entry.amountCents,
+          entry.amount,
           state.settings.weeklyHours,
-          state.settings.monthlyIncomeCents,
+          state.settings.monthlyIncome,
           state.settings.hoursPerWorkday,
         )
       }
@@ -55,7 +55,7 @@ export function buildMonthSheets(state: AppState): MonthSheet[] {
         date: entry.date,
         description: entry.description,
         category,
-        priceCents: entry.amountCents,
+        price: entry.amount,
         transactionType: entry.type === 'income' ? 'Income' : 'Expense',
         hours,
         workdays,

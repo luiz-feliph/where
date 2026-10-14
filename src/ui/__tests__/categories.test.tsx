@@ -63,7 +63,7 @@ describe('Categories page', () => {
     const other = state.categories.find((c) => c.name === 'Other')!
     const personal = state.categories.find((c) => c.name === 'Personal')!
     state.entries = [
-      { id: 'e1', date: '2026-01-02', description: 'X', categoryId: other.id, amountCents: 100, type: 'expense' },
+      { id: 'e1', date: '2026-01-02', description: 'X', categoryId: other.id, amount: 1, type: 'expense' },
     ]
     const mem: Storage = {
       load: () => state,
