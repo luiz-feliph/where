@@ -8,6 +8,6 @@ export function filterEntriesByMonth(entries: Array<{ date: string }>, year: num
   return entries.filter((e) => getMonthKey(e.date) === key)
 }
 
-export function sortEntriesByDate(entries: Array<{ date: string; id?: string }>): Array<{ date: string }> {
+export function sortEntriesByDate<T extends { date: string }>(entries: T[]): T[] {
   return [...entries].sort((a, b) => a.date.localeCompare(b.date))
 }

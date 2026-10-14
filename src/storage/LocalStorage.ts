@@ -21,16 +21,20 @@ export function createInitialState(): AppState {
 }
 
 export class LocalStorageImpl implements Storage {
+  lastLoadHadError = false
+
   load(): AppState | null {
     try {
       const raw = localStorage.getItem(STORAGE_KEY)
       if (!raw) return null
       const parsed = JSON.parse(raw) as AppState
       if (!parsed.schemaVersion) {
+        this.lastLoadHadError = true
         return createInitialState()
       }
       return parsed
-    } catch (e) {
+    } catch {
+      this.lastLoadHadError = true
       return createInitialState()
     }
   }
@@ -38,8 +42,8 @@ export class LocalStorageImpl implements Storage {
   save(state: AppState): void {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state))
-    } catch (e) {
-      // ignore
+    } catch {
+      // ignore write errors (e.g. quota exceeded)
     }
   }
 }

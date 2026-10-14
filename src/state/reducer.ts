@@ -1,5 +1,4 @@
 import type { AppState, Category, Entry, Settings } from '../domain/types'
-import { DEFAULT_SCHEMA_VERSION } from '../domain/types'
 import { validateCategoryName, validateEntry, validateSettings } from '../domain/validation'
 
 export type Action =

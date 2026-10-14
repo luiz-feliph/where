@@ -22,7 +22,7 @@ test('sortEntriesByDate sorts ascending', () => {
     { date: '2026-01-02', id: '2' },
     { date: '2026-01-01', id: '1' },
   ]
-  const result = sortEntriesByDate(entries as any)
+  const result = sortEntriesByDate(entries)
   expect(result[0].id).toBe('1')
   expect(result[2].id).toBe('3')
 })
