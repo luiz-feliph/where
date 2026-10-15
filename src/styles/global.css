@@ -245,8 +245,7 @@ tbody tr:last-child td {
 }
 
 .actions {
-  display: flex;
-  gap: 0.35rem;
+  white-space: nowrap;
 }
 
 .actions button {
@@ -255,6 +254,10 @@ tbody tr:last-child td {
   color: var(--text-muted);
   cursor: pointer;
   padding: 0.2rem 0.35rem;
+}
+
+.actions button + button {
+  margin-left: 0.35rem;
 }
 
 .actions button:hover {
