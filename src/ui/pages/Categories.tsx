@@ -2,8 +2,10 @@ import { useState } from 'react'
 import { useApp } from '../../state/context'
 import { validateCategoryName } from '../../domain/validation'
 import type { Category } from '../../domain/types'
+import { useTranslation } from 'react-i18next'
 
 export function Categories() {
+  const { t } = useTranslation(['common', 'validation'])
   const { state, dispatch } = useApp()
   const [newName, setNewName] = useState('')
   const [error, setError] = useState('')
@@ -16,7 +18,7 @@ export function Categories() {
     const existing = state.categories.map((c) => c.name)
     const errs = validateCategoryName(newName, existing)
     if (errs.length > 0) {
-      setError(errs[0])
+      setError(t(errs[0]))
       return
     }
     dispatch({ type: 'ADD_CATEGORY', payload: { id: crypto.randomUUID(), name: newName.trim(), color: '' } })
@@ -39,15 +41,15 @@ export function Categories() {
 
   return (
     <section className="categories-page">
-      <h2>Categories</h2>
+      <h2>{t('common:categories')}</h2>
       <form onSubmit={handleCreate} className="category-create" noValidate>
         <input
-          aria-label="New category name"
+          aria-label={t('common:newCategoryName')}
           value={newName}
           onChange={(e) => setNewName(e.target.value)}
-          placeholder="New category"
+          placeholder={t('common:newCategoryName')}
         />
-        <button type="submit" className="btn primary">Add</button>
+        <button type="submit" className="btn primary">{t('common:add')}</button>
       </form>
       {error && <p role="alert" className="errors">{error}</p>}
 
@@ -71,13 +73,13 @@ export function Categories() {
                 <span className="category-name">{cat.name}</span>
                 <input
                   type="color"
-                  aria-label={`Color for ${cat.name}`}
+                  aria-label={t('common:color', { name: cat.name })}
                   value={cat.color}
                   onChange={(e) => dispatch({ type: 'UPDATE_CATEGORY', payload: { ...cat, color: e.target.value } })}
                 />
-                <button type="button" onClick={() => { setEditing(cat); setError('') }}>Rename</button>
+                <button type="button" onClick={() => { setEditing(cat); setError('') }}>{t('common:rename')}</button>
                 <button type="button" onClick={() => startDelete(cat)} disabled={state.categories.length <= 1}>
-                  Delete
+                  {t('common:delete')}
                 </button>
               </>
             )}
@@ -88,16 +90,16 @@ export function Categories() {
       {deleting && (
         <div className="modal-backdrop" onClick={() => setDeleting(null)}>
           <div className="modal" role="dialog" aria-modal="true" onClick={(e) => e.stopPropagation()}>
-            <h3>Delete “{deleting.name}”?</h3>
-            <p>Reassign its entries to:</p>
-            <select aria-label="Reassign to" value={reassignToId} onChange={(e) => setReassignToId(e.target.value)}>
+            <h3>{t('common:deleteCategoryTitle', { name: deleting.name })}</h3>
+            <p>{t('common:reassignEntriesTo')}</p>
+            <select aria-label={t('common:reassignEntriesTo')} value={reassignToId} onChange={(e) => setReassignToId(e.target.value)}>
               {state.categories.filter((c) => c.id !== deleting.id).map((c) => (
                 <option key={c.id} value={c.id}>{c.name}</option>
               ))}
             </select>
             <div className="modal-actions">
-              <button type="button" className="btn" onClick={() => setDeleting(null)}>Cancel</button>
-              <button type="button" className="btn danger" onClick={confirmDelete}>Delete</button>
+              <button type="button" className="btn" onClick={() => setDeleting(null)}>{t('common:cancel')}</button>
+              <button type="button" className="btn danger" onClick={confirmDelete}>{t('common:delete')}</button>
             </div>
           </div>
         </div>
@@ -115,6 +117,7 @@ function RenameForm({
   onSave: (name: string) => void
   onCancel: () => void
 }) {
+  const { t } = useTranslation(['common', 'validation'])
   const [name, setName] = useState(category.name)
   const { state } = useApp()
   const [error, setError] = useState('')
@@ -126,17 +129,17 @@ function RenameForm({
         const existing = state.categories.filter((c) => c.id !== category.id).map((c) => c.name)
         const errs = validateCategoryName(name, existing)
         if (errs.length > 0) {
-          setError(errs[0])
+          setError(t(errs[0]))
           return
         }
         onSave(name)
       }}
       noValidate
     >
-      <input aria-label={`Rename ${category.name}`} value={name} onChange={(e) => setName(e.target.value)} />
+      <input aria-label={t('common:rename')} value={name} onChange={(e) => setName(e.target.value)} />
       {error && <span role="alert" className="errors">{error}</span>}
-      <button type="submit" className="btn primary">Save</button>
-      <button type="button" className="btn" onClick={onCancel}>Cancel</button>
+      <button type="submit" className="btn primary">{t('common:save')}</button>
+      <button type="button" className="btn" onClick={onCancel}>{t('common:cancel')}</button>
     </form>
   )
 }

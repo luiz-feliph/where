@@ -1,0 +1,11 @@
+{
+  "descriptionRequired": "A descrição é obrigatória",
+  "priceGreaterThanZero": "O preço deve ser maior que 0",
+  "validDateRequired": "É necessário informar uma data válida",
+  "categoryRequired": "A categoria é obrigatória",
+  "monthlyIncomeGreaterThanZero": "A renda mensal deve ser maior que 0",
+  "weeklyHoursRange": "As horas semanais devem estar entre 1 e 168",
+  "hoursPerWorkdayRange": "As horas por dia de trabalho devem estar entre 1 e 24",
+  "categoryNameEmpty": "O nome da categoria não pode estar vazio",
+  "categoryNameExists": "Essa categoria já existe"
+}

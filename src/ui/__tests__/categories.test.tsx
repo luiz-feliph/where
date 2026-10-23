@@ -28,13 +28,13 @@ describe('Categories page', () => {
         <Categories />
       </AppProvider>,
     )
-    await userEvent.type(screen.getByLabelText(/new category name/i), 'Transport')
-    await userEvent.click(screen.getByRole('button', { name: /^add$/i }))
+    await userEvent.type(screen.getByLabelText(/nova categoria/i), 'Transport')
+    await userEvent.click(screen.getByRole('button', { name: /^adicionar$/i }))
     expect(get().categories.some((c) => c.name === 'Transport')).toBe(true)
 
-    await userEvent.type(screen.getByLabelText(/new category name/i), 'transport')
-    await userEvent.click(screen.getByRole('button', { name: /^add$/i }))
-    expect(screen.getByRole('alert')).toHaveTextContent(/already exists/i)
+    await userEvent.type(screen.getByLabelText(/nova categoria/i), 'transport')
+    await userEvent.click(screen.getByRole('button', { name: /^adicionar$/i }))
+    expect(screen.getByRole('alert')).toHaveTextContent(/já existe/i)
   })
 
   it('renames a category and rejects duplicate rename', async () => {
@@ -44,24 +44,24 @@ describe('Categories page', () => {
         <Categories />
       </AppProvider>,
     )
-    const otherRow = screen.getByText('Other').closest('li')!
-    await userEvent.click(within(otherRow).getByRole('button', { name: /rename/i }))
-    const input = screen.getByLabelText(/rename Other/i)
+    const otherRow = screen.getByText('Outro').closest('li')!
+    await userEvent.click(within(otherRow).getByRole('button', { name: /renomear/i }))
+    const input = screen.getByLabelText(/renomear/i)
     await userEvent.clear(input)
-    await userEvent.type(input, 'Personal')
-    await userEvent.click(screen.getByRole('button', { name: /^save$/i }))
-    expect(screen.getByRole('alert')).toHaveTextContent(/already exists/i)
+    await userEvent.type(input, 'Pessoal')
+    await userEvent.click(screen.getByRole('button', { name: /^salvar$/i }))
+    expect(screen.getByRole('alert')).toHaveTextContent(/já existe/i)
 
     await userEvent.clear(input)
-    await userEvent.type(input, 'Misc')
-    await userEvent.click(screen.getByRole('button', { name: /^save$/i }))
-    expect(get().categories.some((c) => c.name === 'Misc')).toBe(true)
+    await userEvent.type(input, 'Diversos')
+    await userEvent.click(screen.getByRole('button', { name: /^salvar$/i }))
+    expect(get().categories.some((c) => c.name === 'Diversos')).toBe(true)
   })
 
   it('deletes a category by reassigning its entries', async () => {
     const state = createInitialState()
-    const other = state.categories.find((c) => c.name === 'Other')!
-    const personal = state.categories.find((c) => c.name === 'Personal')!
+    const other = state.categories.find((c) => c.name === 'Outro')!
+    const personal = state.categories.find((c) => c.name === 'Pessoal')!
     state.entries = [
       { id: 'e1', date: '2026-01-02', description: 'X', categoryId: other.id, amount: 1, type: 'expense' },
     ]
@@ -74,11 +74,11 @@ describe('Categories page', () => {
         <Categories />
       </AppProvider>,
     )
-    const row = screen.getByText('Other').closest('li')!
-    await userEvent.click(within(row).getByRole('button', { name: /^delete$/i }))
+    const row = screen.getByText('Outro').closest('li')!
+    await userEvent.click(within(row).getByRole('button', { name: /^excluir$/i }))
     const dialog = screen.getByRole('dialog')
-    await userEvent.selectOptions(within(dialog).getByLabelText(/reassign/i), personal.id)
-    await userEvent.click(within(dialog).getByRole('button', { name: /^delete$/i }))
-    expect(screen.queryByText('Other')).not.toBeInTheDocument()
+    await userEvent.selectOptions(within(dialog).getByLabelText(/reatribuir/i), personal.id)
+    await userEvent.click(within(dialog).getByRole('button', { name: /^excluir$/i }))
+    expect(screen.queryByText('Outro')).not.toBeInTheDocument()
   })
 })

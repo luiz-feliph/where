@@ -9,10 +9,12 @@ import { EntryForm } from './ui/components/EntryForm/EntryForm'
 import { Dashboard } from './ui/components/Dashboard/Dashboard'
 import { filterEntriesByMonth, sortEntriesByDate } from './domain/month'
 import type { Entry } from './domain/types'
+import { useTranslation } from 'react-i18next'
 
 type Page = 'dashboard' | 'categories' | 'settings'
 
 function AppShell() {
+  const { t } = useTranslation('common')
   const { state, dispatch, storageWarning } = useApp()
   const [year, setYear] = useState(() => new Date().getFullYear())
   const [month, setMonth] = useState(() => new Date().getMonth() + 1)
@@ -26,7 +28,7 @@ function AppShell() {
       <>
         {storageWarning && (
           <p role="alert" className="storage-warning">
-            Your saved data could not be read and was reset.
+            {t('storageWarning')}
           </p>
         )}
         <Onboarding />
@@ -55,7 +57,7 @@ function AppShell() {
     <div className="app">
       {storageWarning && (
         <p role="alert" className="storage-warning">
-          Your saved data could not be read and was reset.
+          {t('storageWarning')}
         </p>
       )}
       <TopBar
@@ -75,9 +77,9 @@ function AppShell() {
           <>
             <section className="entries">
               <div className="entries-header">
-                <h2>Entries</h2>
+                <h2>{t('entries')}</h2>
                 <button type="button" className="btn primary" onClick={openCreate}>
-                  + New entry
+                  + {t('newEntry')}
                 </button>
               </div>
               <EntryTable
@@ -105,7 +107,7 @@ function AppShell() {
       </main>
 
       {page === 'dashboard' && (
-        <button type="button" className="fab" aria-label="New entry" onClick={openCreate}>
+        <button type="button" className="fab" aria-label={t('newEntry')} onClick={openCreate}>
           +
         </button>
       )}
@@ -125,11 +127,11 @@ function AppShell() {
       {deletingEntry && (
         <div className="modal-backdrop" onClick={() => setDeletingEntry(null)}>
           <div className="modal" role="dialog" aria-modal="true" onClick={(e) => e.stopPropagation()}>
-            <h2>Delete entry?</h2>
-            <p>“{deletingEntry.description}” will be removed.</p>
+            <h2>{t('deleteEntryTitle')}</h2>
+            <p>{t('deleteEntryConfirm', { description: deletingEntry.description })}</p>
             <div className="modal-actions">
               <button type="button" className="btn" onClick={() => setDeletingEntry(null)}>
-                Cancel
+                {t('cancel')}
               </button>
               <button
                 type="button"
@@ -139,7 +141,7 @@ function AppShell() {
                   setDeletingEntry(null)
                 }}
               >
-                Delete
+                {t('delete')}
               </button>
             </div>
           </div>

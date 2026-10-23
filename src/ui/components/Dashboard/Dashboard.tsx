@@ -3,6 +3,7 @@ import { aggregateByCategoryForMonth } from '../../../domain/aggregation'
 import { getMonthKey } from '../../../domain/month'
 import { formatBRL, formatHours, formatWorkdays, roundMoney } from '../../../domain/formatting'
 import { PieChart } from './PieChart'
+import { useTranslation } from 'react-i18next'
 
 function formatConverted(value: number, unit: 'hours' | 'workdays'): string {
   return unit === 'hours' ? formatHours(value) : formatWorkdays(value)
@@ -23,6 +24,7 @@ export function Dashboard({
   month: number
   unit: 'hours' | 'workdays'
 }) {
+  const { t } = useTranslation('common')
   const { aggregates, totalExpenses, totalExpensesConverted } = aggregateByCategoryForMonth(
     entries,
     year,
@@ -42,38 +44,38 @@ export function Dashboard({
 
   return (
     <section className="dashboard">
-      <h2>Dashboard</h2>
+      <h2>{t('dashboard')}</h2>
       <div className="summary">
         <div className="summary-item">
-          <span>Total income</span>
+          <span>{t('totalIncome')}</span>
           <strong>{formatBRL(totalIncome)}</strong>
         </div>
         <div className="summary-item">
-          <span>Total expenses</span>
+          <span>{t('totalExpenses')}</span>
           <strong>{formatBRL(totalExpenses)}</strong>
         </div>
         <div className="summary-item">
-          <span>Balance</span>
+          <span>{t('balance')}</span>
           <strong className={balance < 0 ? 'negative' : ''}>{formatBRL(balance)}</strong>
         </div>
         <div className="summary-item">
-          <span>Expenses in {unit}</span>
+          <span>{t('expensesIn', { unit: unit === 'hours' ? t('hours').toLowerCase() : t('workdays').toLowerCase() })}</span>
           <strong>{formatConverted(totalExpensesConverted, unit)}</strong>
         </div>
       </div>
 
       {aggregates.length === 0 ? (
-        <p className="empty">No expenses this month.</p>
+        <p className="empty">{t('noExpensesThisMonth')}</p>
       ) : (
         <div className="dashboard-body">
           <div className="table-scroll">
             <table className="category-table">
               <thead>
                 <tr>
-                  <th scope="col">Category</th>
-                  <th scope="col">Amount</th>
-                  <th scope="col">{unit === 'hours' ? 'Hours' : 'Workdays'}</th>
-                  <th scope="col">%</th>
+                <th scope="col">{t('category')}</th>
+                <th scope="col">{t('amount')}</th>
+                <th scope="col">{unit === 'hours' ? t('hours') : t('workdays')}</th>
+                <th scope="col">{t('percentage')}</th>
                 </tr>
               </thead>
               <tbody>

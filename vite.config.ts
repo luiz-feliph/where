@@ -10,9 +10,9 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['icons/icon-192.png', 'icons/icon-512.png', 'icons/maskable-512.png'],
       manifest: {
-        name: 'Where — Money in life time',
+        name: 'Where — Dinheiro em tempo de vida',
         short_name: 'Where',
-        description: 'Track expenses and see what they cost in hours and workdays of your life.',
+        description: 'Acompanhe despesas e veja quanto custam em horas e dias de trabalho da sua vida.',
         theme_color: '#121212',
         background_color: '#121212',
         display: 'standalone',

@@ -15,8 +15,11 @@
   },
   "dependencies": {
     "exceljs": "^4.4.0",
+    "i18next": "^26.5.7",
+    "i18next-browser-languagedetector": "^8.2.2",
     "react": "^19.2.8",
-    "react-dom": "^19.2.8"
+    "react-dom": "^19.2.8",
+    "react-i18next": "^17.1.5"
   },
   "devDependencies": {
     "@commitlint/cli": "^21.2.3",

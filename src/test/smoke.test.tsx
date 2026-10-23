@@ -6,6 +6,6 @@ describe('App', () => {
   it('shows onboarding on first launch', () => {
     localStorage.clear()
     render(<App />)
-    expect(screen.getByRole('heading', { name: /welcome to where/i })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: /where/i })).toBeInTheDocument()
   })
 })

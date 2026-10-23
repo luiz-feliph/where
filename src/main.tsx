@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client'
 import { registerSW } from 'virtual:pwa-register'
 import App from './App.tsx'
 import './styles/global.css'
+import './i18n/config'
 
 registerSW({ immediate: true })
 

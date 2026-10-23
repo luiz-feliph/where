@@ -5,13 +5,13 @@ export function validateSettings(settings: {
 }): string[] {
   const errors: string[] = []
   if (!settings.monthlyIncome || settings.monthlyIncome <= 0) {
-    errors.push('Monthly income must be greater than 0')
+    errors.push('validation:monthlyIncomeGreaterThanZero')
   }
   if (!settings.weeklyHours || settings.weeklyHours <= 0 || settings.weeklyHours > 168) {
-    errors.push('Weekly hours must be between 1 and 168')
+    errors.push('validation:weeklyHoursRange')
   }
   if (!Number.isInteger(settings.hoursPerWorkday) || settings.hoursPerWorkday < 1 || settings.hoursPerWorkday > 24) {
-    errors.push('Hours per workday must be between 1 and 24')
+    errors.push('validation:hoursPerWorkdayRange')
   }
   return errors
 }
@@ -24,16 +24,16 @@ export function validateEntry(entry: {
 }): string[] {
   const errors: string[] = []
   if (!entry.description || entry.description.trim().length === 0) {
-    errors.push('Description is required')
+    errors.push('validation:descriptionRequired')
   }
   if (!entry.amount || entry.amount <= 0) {
-    errors.push('Price must be greater than 0')
+    errors.push('validation:priceGreaterThanZero')
   }
   if (!entry.date || !/^\d{4}-\d{2}-\d{2}$/.test(entry.date)) {
-    errors.push('Valid date is required')
+    errors.push('validation:validDateRequired')
   }
   if (!entry.categoryId) {
-    errors.push('Category is required')
+    errors.push('validation:categoryRequired')
   }
   return errors
 }
@@ -41,13 +41,13 @@ export function validateEntry(entry: {
 export function validateCategoryName(name: string, existingNames: string[], currentId?: string): string[] {
   const errors: string[] = []
   if (!name || name.trim().length === 0) {
-    errors.push('Category name cannot be empty')
+    errors.push('validation:categoryNameEmpty')
   } else {
     const normalized = name.trim().toLowerCase()
     for (const existing of existingNames) {
       if (existing.toLowerCase() === normalized) {
         if (!currentId) {
-          errors.push('Category name already exists')
+          errors.push('validation:categoryNameExists')
           break
         }
       }

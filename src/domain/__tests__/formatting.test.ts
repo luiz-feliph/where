@@ -1,14 +1,14 @@
 import { formatBRL, parseBRLToReais, formatHours, formatWorkdays, formatShortDate } from '../formatting'
 
 test('formatBRL formats reais', () => {
-  expect(formatBRL(1234.56)).toBe('R$ 1,234.56')
-  expect(formatBRL(1)).toBe('R$ 1.00')
-  expect(formatBRL(0)).toBe('R$ 0.00')
+  expect(formatBRL(1234.56)).toMatch(/R\$.*1\.234,56/)
+  expect(formatBRL(1)).toMatch(/R\$.*1,00/)
+  expect(formatBRL(0)).toMatch(/R\$.*0,00/)
 })
 
 test('parseBRLToReais parses price strings', () => {
-  expect(parseBRLToReais('375.00')).toBe(375)
-  expect(parseBRLToReais('1,234.56')).toBe(1234.56)
+  expect(parseBRLToReais('375,00')).toBe(375)
+  expect(parseBRLToReais('1.234,56')).toBe(1234.56)
   expect(parseBRLToReais('10')).toBe(10)
 })
 
@@ -19,6 +19,6 @@ test('formatHours and formatWorkdays', () => {
 })
 
 test('formatShortDate derives correctly', () => {
-  expect(formatShortDate('2026-01-02')).toBe('02, Fri')
-  expect(formatShortDate('2026-01-01')).toBe('01, Thu')
+  expect(formatShortDate('2026-01-02')).toBe('02, sex.')
+  expect(formatShortDate('2026-01-01')).toBe('01, qui.')
 })

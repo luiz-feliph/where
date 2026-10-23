@@ -27,8 +27,8 @@ describe('Onboarding', () => {
         <Onboarding />
       </AppProvider>,
     )
-    expect(screen.getByRole('heading', { name: /welcome to where/i })).toBeInTheDocument()
-    await userEvent.click(screen.getByRole('button', { name: /get started/i }))
+    expect(screen.getByRole('heading', { name: /where/i })).toBeInTheDocument()
+    await userEvent.click(screen.getByRole('button', { name: /começar/i }))
     expect(screen.getByRole('alert')).toBeInTheDocument()
     expect(saved.every((s) => s.settings === null)).toBe(true)
   })
@@ -40,11 +40,11 @@ describe('Onboarding', () => {
         <Onboarding />
       </AppProvider>,
     )
-    await userEvent.type(screen.getByLabelText(/monthly income/i), '1500.00')
-    await userEvent.type(screen.getByLabelText(/hours worked per week/i), '20')
-    await userEvent.clear(screen.getByLabelText(/hours that count/i))
-    await userEvent.type(screen.getByLabelText(/hours that count/i), '17')
-    await userEvent.click(screen.getByRole('button', { name: /get started/i }))
+    await userEvent.type(screen.getByLabelText(/renda mensal/i), '1500,00')
+    await userEvent.type(screen.getByLabelText(/horas trabalhadas por semana/i), '20')
+    await userEvent.clear(screen.getByLabelText(/equivalem a 1 dia/i))
+    await userEvent.type(screen.getByLabelText(/equivalem a 1 dia/i), '17')
+    await userEvent.click(screen.getByRole('button', { name: /começar/i }))
     expect(screen.queryByRole('alert')).not.toBeInTheDocument()
   })
 })

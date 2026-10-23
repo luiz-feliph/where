@@ -1,6 +1,7 @@
 import type { Entry, Category, Settings } from '../../../domain/types'
 import { expenseHours, expenseWorkdays } from '../../../domain/conversions'
 import { formatBRL, formatHours, formatShortDate, formatWorkdays } from '../../../domain/formatting'
+import { useTranslation } from 'react-i18next'
 
 export function EntryTable({
   entries,
@@ -17,7 +18,8 @@ export function EntryTable({
   onEdit: (entry: Entry) => void
   onDelete: (entry: Entry) => void
 }) {
-  const conversionHeader = unit === 'hours' ? 'Hours' : 'Workdays'
+  const { t } = useTranslation('common')
+  const conversionHeader = unit === 'hours' ? t('hours') : t('workdays')
   const categoryById = new Map(categories.map((c) => [c.id, c]))
 
   function conversionFor(entry: Entry): string {
@@ -31,7 +33,7 @@ export function EntryTable({
   }
 
   if (entries.length === 0) {
-    return <p className="empty">No entries for this month.</p>
+    return <p className="empty">{t('noEntriesThisMonth')}</p>
   }
 
   return (
@@ -39,13 +41,13 @@ export function EntryTable({
       <table className="entry-table">
         <thead>
           <tr>
-            <th scope="col">Date</th>
-            <th scope="col">Description</th>
-            <th scope="col">Category</th>
-            <th scope="col">Price</th>
-            <th scope="col">Type</th>
+            <th scope="col">{t('date')}</th>
+            <th scope="col">{t('description')}</th>
+            <th scope="col">{t('category')}</th>
+            <th scope="col">{t('price')}</th>
+            <th scope="col">{t('type')}</th>
             <th scope="col">{conversionHeader}</th>
-            <th scope="col"><span className="sr-only">Actions</span></th>
+            <th scope="col"><span className="sr-only">{t('actions')}</span></th>
           </tr>
         </thead>
         <tbody>
@@ -64,11 +66,11 @@ export function EntryTable({
                   )}
                 </td>
                 <td className={entry.type === 'expense' ? 'num expense' : 'num income'}>{formatBRL(entry.amount)}</td>
-                <td>{entry.type === 'income' ? 'Income' : 'Expense'}</td>
+                <td>{entry.type === 'income' ? t('income') : t('expense')}</td>
                 <td className="num conversion">{conversionFor(entry)}</td>
                 <td className="actions">
-                  <button type="button" onClick={() => onEdit(entry)} aria-label={`Edit ${entry.description}`}>Edit</button>
-                  <button type="button" onClick={() => onDelete(entry)} aria-label={`Delete ${entry.description}`}>Delete</button>
+                  <button type="button" onClick={() => onEdit(entry)} aria-label={`${t('edit')} ${entry.description}`}>{t('edit')}</button>
+                  <button type="button" onClick={() => onDelete(entry)} aria-label={`${t('delete')} ${entry.description}`}>{t('delete')}</button>
                 </td>
               </tr>
             )

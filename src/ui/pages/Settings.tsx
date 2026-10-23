@@ -2,10 +2,12 @@ import { useState } from 'react'
 import { useApp } from '../../state/context'
 import { parseBRLToReais } from '../../domain/formatting'
 import { validateSettings } from '../../domain/validation'
+import { useTranslation } from 'react-i18next'
 
 export function SettingsPage() {
+  const { t } = useTranslation(['common', 'validation'])
   const { state, dispatch } = useApp()
-  const [income, setIncome] = useState(state.settings ? state.settings.monthlyIncome.toFixed(2) : '')
+  const [income, setIncome] = useState(state.settings ? state.settings.monthlyIncome.toFixed(2).replace('.', ',') : '')
   const [weeklyHours, setWeeklyHours] = useState(state.settings ? String(state.settings.weeklyHours) : '')
   const [hoursPerWorkday, setHoursPerWorkday] = useState(state.settings ? String(state.settings.hoursPerWorkday) : '17')
   const [errors, setErrors] = useState<string[]>([])
@@ -31,27 +33,27 @@ export function SettingsPage() {
 
   return (
     <section className="settings-page">
-      <h2>Settings</h2>
+      <h2>{t('common:settings')}</h2>
       <form onSubmit={handleSubmit} noValidate>
         <label>
-          Monthly income (R$)
-          <input aria-label="Monthly income (R$)" value={income} onChange={(e) => setIncome(e.target.value)} inputMode="decimal" />
+          {t('common:monthlyIncome')}
+          <input aria-label={t('common:monthlyIncome')} value={income} onChange={(e) => setIncome(e.target.value)} inputMode="decimal" />
         </label>
         <label>
-          Hours worked per week
-          <input aria-label="Hours worked per week" value={weeklyHours} onChange={(e) => setWeeklyHours(e.target.value)} inputMode="numeric" />
+          {t('common:hoursWorkedPerWeek')}
+          <input aria-label={t('common:hoursWorkedPerWeek')} value={weeklyHours} onChange={(e) => setWeeklyHours(e.target.value)} inputMode="numeric" />
         </label>
         <label>
-          Hours that count as 1 workday
-          <input aria-label="Hours that count as 1 workday" value={hoursPerWorkday} onChange={(e) => setHoursPerWorkday(e.target.value)} inputMode="numeric" />
+          {t('common:hoursPerWorkday')}
+          <input aria-label={t('common:hoursPerWorkday')} value={hoursPerWorkday} onChange={(e) => setHoursPerWorkday(e.target.value)} inputMode="numeric" />
         </label>
         {errors.length > 0 && (
           <ul role="alert" className="errors">
-            {errors.map((err) => <li key={err}>{err}</li>)}
+            {errors.map((err) => <li key={err}>{t(err)}</li>)}
           </ul>
         )}
-        {saved && <p role="status" className="saved">Saved</p>}
-        <button type="submit" className="btn primary">Save</button>
+        {saved && <p role="status" className="saved">{t('common:saved')}</p>}
+        <button type="submit" className="btn primary">{t('common:save')}</button>
       </form>
       <button
         type="button"
@@ -61,7 +63,7 @@ export function SettingsPage() {
           await downloadExport(state)
         }}
       >
-        Export spreadsheet (.xlsx)
+        {t('common:exportSpreadsheet')}
       </button>
     </section>
   )
